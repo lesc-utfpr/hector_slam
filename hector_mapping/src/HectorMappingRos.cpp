@@ -296,15 +296,15 @@ void HectorMappingRos::scanCallback(const sensor_msgs::LaserScan& scan)
       {
         tf::StampedTransform stamped_pose;
 
-        tf_.waitForTransform(p_map_frame_, p_base_frame_, scan.header.stamp, ros::Duration(0.5));
-        tf_.lookupTransform(p_map_frame_, p_base_frame_,  scan.header.stamp, stamped_pose);
+        tf_.waitForTransform(p_map_frame_, p_base_frame_, scan.header.stamp, ros::Duration(0.01));
+        tf_.lookupTransform(p_map_frame_, p_base_frame_,  ros::Time(0), stamped_pose);
 
         const double yaw = tf::getYaw(stamped_pose.getRotation());
         start_estimate = Eigen::Vector3f(stamped_pose.getOrigin().getX(), stamped_pose.getOrigin().getY(), yaw);
       }
       catch(tf::TransformException e)
       {
-        ROS_ERROR("Transform from %s to %s failed\n", p_map_frame_.c_str(), p_base_frame_.c_str());
+        ROS_ERROR("Transform from %s to %s failed: %s\n", p_map_frame_.c_str(), p_base_frame_.c_str(), e.what());
         start_estimate = slamProcessor->getLastScanMatchPose();
       }
     }
