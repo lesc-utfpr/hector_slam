@@ -300,7 +300,7 @@ void HectorMappingRos::scanCallback(const sensor_msgs::LaserScan& scan)
         tf_.lookupTransform(p_map_frame_, p_base_frame_,  ros::Time(0), stamped_pose);
 
         const double yaw = tf::getYaw(stamped_pose.getRotation());
-        printf("""Yaw: %f\n", yaw);
+        printf("Yaw: %f\n", yaw);
         start_estimate = Eigen::Vector3f(stamped_pose.getOrigin().getX(), stamped_pose.getOrigin().getY(), yaw);
       }
       catch(tf::TransformException e)
